@@ -135,7 +135,7 @@ def ipScanner(range_selection):
     elif range_selection == 1:
         selected_range.append("192.168.1.")
     elif range_selection == 2:
-        selected_range.extend(("192.168.0.", "192.168.0."))
+        selected_range.extend(("192.168.0.", "192.168.1."))
     else:
         selected_range.append("192.168.1.")
 
