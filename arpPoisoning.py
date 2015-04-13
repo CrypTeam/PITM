@@ -1,5 +1,3 @@
-# NOTE(cab): Source: http://www.secdev.org/python/arpyspoof.py
-
 import sys, string, argparse, re, os
 from socket import *
 from struct import *
@@ -135,7 +133,9 @@ def ipScanner(range_selection):
     elif range_selection == 1:
         selected_range.append("192.168.1.")
     elif range_selection == 2:
-        selected_range.extend(("192.168.0.", "192.168.1."))
+        selected_range.append("192.168.2.")
+    elif range_selection == 3:
+        selected_range.extend(("192.168.0.", "192.168.1.", "192.168.2."))
     else:
         selected_range.append("192.168.1.")
 
@@ -200,7 +200,8 @@ def runIPScannerMenu():
     os.system('clear')
     print "[0] 192.168.0.x"
     print "[1] 192.168.1.x"
-    print "[2] I do not know (will be running both)"
+    print "[2] 192.168.2.x"
+    print "[3] I do not know (will run them all)"
     print "Type 'exit' to exit or 'return' to go back in the menus"
     user_selection = raw_input("Select the IP range you are interested with: ")
     if user_selection == "return":
@@ -232,10 +233,12 @@ def selectIpToAttackMenu(ip_addresses):
         startPoisoning(victim_ip, router_ip)
 
 def findRouterIP(victim_ip):
-    if "192.168.1." in victim_ip:
+    if "192.168.0." in victim_ip:
+        router_ip = "192.168.0.1"
+    elif "192.168.1." in victim_ip:
         router_ip = "192.168.1.1"
     else:
-        router_ip = "192.168.0.1"
+        router_ip = "192.168.2.1"
 
     return router_ip
 
