@@ -2,7 +2,7 @@ import sys, string, argparse, re, os
 from socket import *
 from struct import *
 from time import sleep
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE,check_output
 from uuid import getnode
 
 ETHER_BROADCAST = "\xff"*6 # NOTE(cab): Broadcast address (ff:ff:ff:ff:ff:ff)
@@ -174,7 +174,7 @@ def manualAttackMenu():
         return
     else:
         victim_ip = user_selection
-        router_ip = findRouterIP(victim_ip)
+        router_ip = findRouterIP()
         startPoisoning(victim_ip, router_ip)
 
 def mainMenu():
@@ -229,17 +229,11 @@ def selectIpToAttackMenu(ip_addresses):
     else:
         parsed_selection = int(user_selection)
         victim_ip = ip_addresses[parsed_selection]
-        router_ip = findRouterIP(victim_ip)
+        router_ip = findRouterIP()
         startPoisoning(victim_ip, router_ip)
 
-def findRouterIP(victim_ip):
-    if "192.168.0." in victim_ip:
-        router_ip = "192.168.0.1"
-    elif "192.168.1." in victim_ip:
-        router_ip = "192.168.1.1"
-    else:
-        router_ip = "192.168.2.1"
-
-    return router_ip
+def findRouterIP():
+    route_ip = check_output("route | grep default", shell=True).split()
+    return router_ip[1]
 
 mainMenu()
